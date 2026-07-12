@@ -1,5 +1,6 @@
 package org.example;
 
+import javax.print.attribute.standard.JobMessageFromOperator;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -27,6 +28,80 @@ public class RegistroApp {
     }
 
     private static void placeComponents(JPanel panel) {
-    }   
+        panel.setLayout(null);
 
+        JLabel userLabel = new JLabel("Nombre:");
+        userLabel.setBounds(10, 20, 80, 25);
+        panel.add(userLabel);
+
+        JTextField userText = new JTextField(20);
+        userText.setBounds(100, 20, 165, 25);
+        panel.add(userText);
+
+        JLabel edadLabel = new JLabel("Edad:");
+        edadLabel.setBounds(10, 50, 80, 25);
+        panel.add(edadLabel);
+
+        JTextField edadText = new JTextField(20);
+        edadText.setBounds(100, 50, 165, 25);
+        panel.add(edadText);
+
+        JButton insertButton = new JButton("Insertar");
+        insertButton.setBounds(10, 80, 120, 25);
+        panel.add(insertButton);
+
+        JButton queryButton = new JButton("Consultar");
+        queryButton.setBounds(150, 80, 120, 25);
+        panel.add(queryButton);
+
+        insertButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nombre = userText.getText();
+                int edad = Integer.parseInt(edadText.getText());
+                insertRegistro(nombre, edad);
+            }
+        });
+
+        queryButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                queryRegistros();
+            }
+        });
+    }
+
+    private static void insertRegistro(String nombre, int edad) {
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+            String sql = "INSERT INTO registros (nombre, edad) VALUES (?,?)";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, nombre);
+            statement.setInt(2, edad);
+            statement.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Registro insertado con exito!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "error al insertar registro!");
+        }
+    }
+
+    private static void queryRegistros() {
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+            String sql = "SELECT * FROM registros";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+
+            StringBuilder resultados = new StringBuilder();
+            while (resultSet.next()) {
+                resultados.append("ID: ").append(resultSet.getInt("id"))
+                        .append(", Nombre: ").append(resultSet.getString("nombre"))
+                        .append(", Edad: ").append(resultSet.getInt("edad"))
+                        .append("\n");
+            }
+            JOptionPane.showMessageDialog(null, resultados.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al consultar registros");
+        }
+    }
 }
