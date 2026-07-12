@@ -1,7 +1,9 @@
 # -_ejemplo_de_programa_java_Insertar_Consultar_registros_mysql_- :.  
 
 <img width="600" height="600" alt="image" src="https://github.com/user-attachments/assets/f0c7c61b-a604-41dc-b70c-40435cccfb6b" />  
-  
+
+<img width="2552" height="1027" alt="image" src="https://github.com/user-attachments/assets/519e9e84-f0e1-4eca-b034-83d3f81a4ec1" />    
+
 # Ejemplo de Programa en Java para Insertar y Consultar Registros en MySQL:
 
 Este documento describe cómo crear un programa en Java utilizando IntelliJ para insertar y consultar 
